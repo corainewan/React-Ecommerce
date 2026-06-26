@@ -6,6 +6,11 @@ import "./checkout-header.css";
 import "./CheckoutPage.css";
 
 export function CheckoutPage({ cart, loadCart }) {
+  let totalQuantity = 0;
+  cart.forEach((cartItem) => {
+    totalQuantity += cartItem.quantity;
+  });
+
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState(null);
 
@@ -36,7 +41,7 @@ export function CheckoutPage({ cart, loadCart }) {
           <div className="checkout-header-middle-section">
             Checkout (
             <a className="return-to-home-link" href="/">
-              3 items
+              {totalQuantity} items
             </a>
             )
           </div>
@@ -56,7 +61,7 @@ export function CheckoutPage({ cart, loadCart }) {
             deliveryOptions={deliveryOptions}
             loadCart={loadCart}
           />
-          <PaymentSummary paymentSummary={paymentSummary} />
+          <PaymentSummary paymentSummary={paymentSummary} loadCart={loadCart} />
         </div>
       </div>
     </>
