@@ -1,4 +1,4 @@
-import { it, expect, describe, vi } from "vitest";
+import { it, expect, describe, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 // render = renders a component in a fake web page
 // screen = check the content of the fake web page, like a virtual DOM
@@ -9,8 +9,10 @@ import { Product } from "./Product";
 vi.mock("axios"); // Mock the axios module to prevent actual API calls during testing
 
 describe("Product component", () => {
-  it("display product details correctly", () => {
-    const product = {
+  let product;
+  let loadCartMock;
+  beforeEach(() => {
+    product = {
       id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
       image: "images/products/athletic-cotton-socks-6-pairs.jpg",
       name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
@@ -21,7 +23,10 @@ describe("Product component", () => {
       priceCents: 1090,
       keywords: ["socks", "sports", "apparel"],
     };
+    loadCartMock = vi.fn();
+  });
 
+  it("display product details correctly", () => {
     const loadCartMock = vi.fn(); // mock function to simulate the loadCart function
 
     render(<Product product={product} loadCart={loadCartMock} />);
@@ -59,12 +64,12 @@ describe("Product component", () => {
       keywords: ["socks", "sports", "apparel"],
     };
 
-    const loadCartMock = vi.fn();
     render(<Product product={product} loadCart={loadCartMock} />);
 
     const addToCartButton = screen.getByTestId("added-to-cart-button");
-    const user = userEvent.setup();
+    const user = userEvent.setup(); // 造一个"假用户"出来
     await user.click(addToCartButton);
+    // 为什么要 await？因为 userEvent 内部这一整套模拟操作（hover → mousedown → mouseup → click）不是瞬间完成的，它是异步的！它会用类似 setTimeout 的机制，一步步地模拟出真实用户操作之间的时间间隔。
 
     expect(loadCartMock).toHaveBeenCalled();
 
