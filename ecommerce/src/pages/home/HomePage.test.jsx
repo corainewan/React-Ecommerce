@@ -52,14 +52,23 @@ describe("HomePage component", () => {
     const productContainers = await screen.findAllByTestId("product-container");
     expect(productContainers.length).toBe(2);
 
+    // 只测内容存不存在，不管顺序
     expect(
       within(productContainers[0]).getByText(
         "Black and Gray Athletic Cotton Socks - 6 Pairs",
       ),
     ).toBeInTheDocument();
-
     expect(
       within(productContainers[1]).getByText("Intermediate Size Basketball"),
     ).toBeInTheDocument();
+
+    const productNames = productContainers.map(
+      (container) => within(container).getByTestId("product-name").textContent,
+    ); // 直接检查每个容器里"第一段文字"是什么，用来验证顺序
+
+    expect(productNames).toEqual([
+      "Black and Gray Athletic Cotton Socks - 6 Pairs",
+      "Intermediate Size Basketball",
+    ]); // 如果顺序错了，这里的错误信息会直接显示两个数组不一样！
   });
 });
