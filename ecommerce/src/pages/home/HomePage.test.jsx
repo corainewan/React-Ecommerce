@@ -1,7 +1,7 @@
 import { it, expect, describe, beforeEach, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 // within = 在某个元素的范围内查找子元素
-import userEvent from "@testing-library/user-event";
+// import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router"; // MemoryRouter 是一个"假路由器"，它不会真的去改变浏览器地址栏的 URL，而是"假装"有一个路由器在运行，让你可以在测试环境里渲染出 <Link>、<NavLink>、<Route> 这些组件。
 import axios from "axios";
 import { HomePage } from "./HomePage";
